@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Riwayat tracking alumni - log pencarian dan pelacakan">
+  <title>Riwayat Tracking — Sistem Pelacakan Alumni</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <h1>🎓 Alumni Tracker</h1>
+        <p>Sistem Pelacakan Alumni</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/index.html" class="nav-link">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="/input.html" class="nav-link">
+          <span class="nav-icon">➕</span> Input Alumni
+        </a>
+        <a href="/tracking.html" class="nav-link">
+          <span class="nav-icon">🔍</span> Tracking Alumni
+        </a>
+        <a href="/evidence.html" class="nav-link">
+          <span class="nav-icon">📋</span> Evidence / Bukti
+        </a>
+        <a href="/history.html" class="nav-link active">
+          <span class="nav-icon">📜</span> Riwayat Tracking
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h2>Riwayat Tracking</h2>
+        <p>Log seluruh aktivitas pencarian dan pelacakan alumni</p>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-bar mb-24">
+        <select class="form-control" id="filterAlumni" style="max-width:250px;">
+          <option value="">Semua Alumni</option>
+        </select>
+      </div>
+
+      <!-- History Table -->
+      <div class="card animate-in">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Alumni</th>
+                <th>Program Studi</th>
+                <th>Query Digunakan</th>
+                <th>Jumlah Hasil</th>
+                <th>Status Alumni</th>
+                <th>Waktu</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable">
+              <tr>
+                <td colspan="7" class="text-center" style="padding: 40px; color: var(--text-muted);">
+                  Memuat data...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/js/history.js"></script>
+</body>
+</html>

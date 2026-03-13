@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Input data alumni baru ke sistem pelacakan alumni">
+  <title>Input Alumni — Sistem Pelacakan Alumni</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <h1>🎓 Alumni Tracker</h1>
+        <p>Sistem Pelacakan Alumni</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/index.html" class="nav-link">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="/input.html" class="nav-link active">
+          <span class="nav-icon">➕</span> Input Alumni
+        </a>
+        <a href="/tracking.html" class="nav-link">
+          <span class="nav-icon">🔍</span> Tracking Alumni
+        </a>
+        <a href="/evidence.html" class="nav-link">
+          <span class="nav-icon">📋</span> Evidence / Bukti
+        </a>
+        <a href="/history.html" class="nav-link">
+          <span class="nav-icon">📜</span> Riwayat Tracking
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h2>Input Data Alumni</h2>
+        <p>Tambahkan profil alumni baru ke dalam sistem</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px;">
+        <!-- Form Section -->
+        <div class="card animate-in">
+          <h3 class="section-title">📝 Form Alumni Baru</h3>
+          <form id="alumniForm">
+            <div class="form-group">
+              <label for="nama">Nama Lengkap</label>
+              <input type="text" class="form-control" id="nama" name="nama" placeholder="Contoh: Ahmad Fauzi Rahman" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tahun_lulus">Tahun Lulus</label>
+                <input type="number" class="form-control" id="tahun_lulus" name="tahun_lulus" placeholder="2023" min="1990" max="2030" required>
+              </div>
+              <div class="form-group">
+                <label for="lokasi">Lokasi</label>
+                <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="Contoh: Jakarta">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="program_studi">Program Studi</label>
+              <select class="form-control" id="program_studi" name="program_studi" required>
+                <option value="">Pilih Program Studi</option>
+                <option value="Teknik Informatika">Teknik Informatika</option>
+                <option value="Sistem Informasi">Sistem Informasi</option>
+                <option value="Teknik Komputer">Teknik Komputer</option>
+                <option value="Manajemen Informatika">Manajemen Informatika</option>
+                <option value="Data Science">Data Science</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              ➕ Simpan Alumni
+            </button>
+          </form>
+        </div>
+
+        <!-- Alumni List -->
+        <div class="card animate-in">
+          <div class="flex-between mb-16">
+            <h3 class="section-title" style="margin-bottom:0;">👥 Daftar Alumni</h3>
+            <div class="filter-bar" style="margin-bottom:0;">
+              <input type="text" class="form-control" id="searchInput" placeholder="🔍 Cari nama..." style="max-width:180px;">
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Prodi</th>
+                  <th>Lulus</th>
+                  <th>Lokasi</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="alumniTable">
+                <tr>
+                  <td colspan="6" class="text-center" style="padding: 40px; color: var(--text-muted);">
+                    Memuat data...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <h3 class="modal-title">⚠️ Hapus Alumni</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Apakah Anda yakin ingin menghapus data alumni ini? Tindakan ini tidak dapat dibatalkan.</p>
+      <div class="flex gap-12" style="justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="document.getElementById('deleteModal').classList.remove('show')">Batal</button>
+        <button class="btn btn-danger" id="confirmDelete">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/input.js"></script>
+</body>
+</html>

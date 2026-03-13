@@ -1,0 +1,20 @@
+{
+  "name": "sistem-pelacakan-alumni",
+  "version": "1.0.0",
+  "description": "Sistem Pelacakan Alumni - Aplikasi web untuk melacak informasi alumni dari sumber publik internet",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "seed": "node database/seed.js"
+  },
+  "keywords": ["alumni", "tracking", "university"],
+  "author": "Syaiful Hidayat",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0"
+  }
+}

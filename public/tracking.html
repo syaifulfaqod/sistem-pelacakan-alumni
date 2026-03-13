@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tracking alumni - pencarian dan pencocokan identitas alumni">
+  <title>Tracking Alumni — Sistem Pelacakan Alumni</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <h1>🎓 Alumni Tracker</h1>
+        <p>Sistem Pelacakan Alumni</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/index.html" class="nav-link">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="/input.html" class="nav-link">
+          <span class="nav-icon">➕</span> Input Alumni
+        </a>
+        <a href="/tracking.html" class="nav-link active">
+          <span class="nav-icon">🔍</span> Tracking Alumni
+        </a>
+        <a href="/evidence.html" class="nav-link">
+          <span class="nav-icon">📋</span> Evidence / Bukti
+        </a>
+        <a href="/history.html" class="nav-link">
+          <span class="nav-icon">📜</span> Riwayat Tracking
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h2>Tracking Alumni</h2>
+        <p>Cari dan cocokkan identitas alumni dari sumber publik</p>
+      </div>
+
+      <!-- Select Alumni -->
+      <div class="card animate-in mb-24">
+        <h3 class="section-title">🎯 Pilih Alumni untuk Tracking</h3>
+        <div class="flex gap-12" style="align-items:flex-end;">
+          <div class="form-group" style="flex:1; margin-bottom:0;">
+            <label for="alumniSelect">Alumni</label>
+            <select class="form-control" id="alumniSelect">
+              <option value="">-- Pilih Alumni --</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="startTracking" disabled>
+            🔍 Mulai Tracking
+          </button>
+        </div>
+      </div>
+
+      <!-- Generated Queries -->
+      <div class="card animate-in mb-24" id="queriesSection" style="display:none;">
+        <h3 class="section-title">🔗 Search Queries yang Dihasilkan</h3>
+        <div class="query-list" id="queryList"></div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-overlay" id="loadingState" style="display:none;">
+        <div class="loading-spinner"></div>
+        <span>Mencari kandidat alumni dari sumber publik...</span>
+      </div>
+
+      <!-- Results -->
+      <div id="resultsSection" style="display:none;">
+        <div class="flex-between mb-16">
+          <h3 class="section-title" style="margin-bottom:0;">📊 Hasil Pencarian Kandidat</h3>
+          <div id="statusBadge"></div>
+        </div>
+        <div id="candidatesList"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">🔍</div>
+        <h3>Pilih alumni untuk memulai tracking</h3>
+        <p>Sistem akan menghasilkan search query otomatis dan mencari kandidat dari sumber publik</p>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/js/tracking.js"></script>
+</body>
+</html>

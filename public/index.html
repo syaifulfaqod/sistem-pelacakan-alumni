@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistem Pelacakan Alumni - Dashboard untuk melacak informasi alumni dari sumber publik internet">
+  <title>Dashboard — Sistem Pelacakan Alumni</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <h1>🎓 Alumni Tracker</h1>
+        <p>Sistem Pelacakan Alumni</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/index.html" class="nav-link active">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="/input.html" class="nav-link">
+          <span class="nav-icon">➕</span> Input Alumni
+        </a>
+        <a href="/tracking.html" class="nav-link">
+          <span class="nav-icon">🔍</span> Tracking Alumni
+        </a>
+        <a href="/evidence.html" class="nav-link">
+          <span class="nav-icon">📋</span> Evidence / Bukti
+        </a>
+        <a href="/history.html" class="nav-link">
+          <span class="nav-icon">📜</span> Riwayat Tracking
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <h2>Dashboard</h2>
+        <p>Ringkasan data pelacakan alumni</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card purple animate-in">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value" id="totalAlumni">-</div>
+          <div class="stat-label">Total Alumni</div>
+        </div>
+        <div class="stat-card teal animate-in">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="identified">-</div>
+          <div class="stat-label">Teridentifikasi</div>
+        </div>
+        <div class="stat-card blue animate-in">
+          <div class="stat-icon">🔍</div>
+          <div class="stat-value" id="needsVerification">-</div>
+          <div class="stat-label">Perlu Verifikasi</div>
+        </div>
+        <div class="stat-card pink animate-in">
+          <div class="stat-icon">❓</div>
+          <div class="stat-value" id="notFound">-</div>
+          <div class="stat-label">Belum Ditemukan</div>
+        </div>
+      </div>
+
+      <!-- Recent Tracking Activity -->
+      <div class="card animate-in">
+        <h3 class="section-title">📈 Aktivitas Tracking Terbaru</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Alumni</th>
+                <th>Query Digunakan</th>
+                <th>Hasil</th>
+                <th>Waktu</th>
+              </tr>
+            </thead>
+            <tbody id="recentActivity">
+              <tr>
+                <td colspan="4" class="text-center" style="padding: 40px; color: var(--text-muted);">
+                  Memuat data...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="mt-24 flex gap-12 flex-wrap">
+        <a href="/input.html" class="btn btn-primary">➕ Tambah Alumni Baru</a>
+        <a href="/tracking.html" class="btn btn-secondary">🔍 Mulai Tracking</a>
+        <a href="/evidence.html" class="btn btn-secondary">📋 Lihat Evidence</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
