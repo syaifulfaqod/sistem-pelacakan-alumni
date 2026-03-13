@@ -21,7 +21,7 @@ https://sistem-pelacakan-alumni-seven.vercel.app
 
 Aplikasi web untuk melacak informasi alumni dari berbagai sumber publik di internet. Sistem bekerja dengan membuat profil alumni, menghasilkan search query otomatis, mengambil hasil dari sumber publik, kemudian melakukan pencocokan identitas menggunakan pendekatan **deterministic** dan **probabilistic** matching.
 
-> **Tugas Kuliah** — Rekayasa Kebutuhan (Daily Project 2)
+> **Tugas Kuliah** — Rekayasa Kebutuhan (Daily Project 3)
 
 ---
 
