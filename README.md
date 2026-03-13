@@ -184,4 +184,4 @@ MIT License — Bebas digunakan untuk keperluan akademik.
 
 ## 👤 Pembuat
 
-**Syaiful Hidayat** — Mahasiswa Semester 6, Mata Kuliah Rekayasa Kebutuhan
+**Syaiful Hidayat** — 202310370311169 , Mata Kuliah Rekayasa Kebutuhan C
