@@ -27,23 +27,31 @@ function getStatusBadge(status) {
 async function loadHistory() {
   try {
     const res = await fetch(`${API}/api/history`);
+    if (!res.ok) throw new Error('API gagal');
     allHistory = await res.json();
     renderHistory(allHistory);
-
-    // Populate alumni filter
-    const alumniNames = [...new Set(allHistory.map(h => JSON.stringify({ id: h.alumni_id, nama: h.alumni_nama })))];
-    const select = document.getElementById('filterAlumni');
-    alumniNames.forEach(a => {
-      const parsed = JSON.parse(a);
-      const opt = document.createElement('option');
-      opt.value = parsed.id;
-      opt.textContent = parsed.nama;
-      select.appendChild(opt);
-    });
+    populateAlumniFilter(allHistory);
   } catch (err) {
-    showToast('Gagal memuat riwayat tracking', 'error');
-    console.error(err);
+    // Fallback ke localStorage
+    allHistory = DemoHelper.getHistory();
+    renderHistory(allHistory);
+    populateAlumniFilter(allHistory);
+    console.warn('History menggunakan mode demo/localStorage:', err);
   }
+}
+
+function populateAlumniFilter(data) {
+  const alumniNames = [...new Set(data.map(h => JSON.stringify({ id: h.alumni_id, nama: h.alumni_nama })))];
+  const select = document.getElementById('filterAlumni');
+  // Reset options (keep first "Semua Alumni" option)
+  select.innerHTML = '<option value="">Semua Alumni</option>';
+  alumniNames.forEach(a => {
+    const parsed = JSON.parse(a);
+    const opt = document.createElement('option');
+    opt.value = parsed.id;
+    opt.textContent = parsed.nama;
+    select.appendChild(opt);
+  });
 }
 
 function renderHistory(data) {

@@ -27,27 +27,34 @@ function getStatusBadge(status) {
 async function loadAlumniOptions() {
   try {
     const res = await fetch(`${API}/api/alumni`);
+    if (!res.ok) throw new Error('API gagal');
     const data = await res.json();
-    const select = document.getElementById('alumniSelect');
-
-    data.forEach(a => {
-      const opt = document.createElement('option');
-      opt.value = a.id;
-      opt.textContent = `${a.nama} — ${a.program_studi} (${a.tahun_lulus})`;
-      select.appendChild(opt);
-    });
-
-    // Check if URL has alumni ID preselected
-    const params = new URLSearchParams(window.location.search);
-    const preselectedId = params.get('id');
-    if (preselectedId) {
-      select.value = preselectedId;
-      document.getElementById('startTracking').disabled = false;
-      // Auto-load existing results
-      loadExistingResults(preselectedId);
-    }
+    populateAlumniSelect(data);
   } catch (err) {
-    showToast('Gagal memuat daftar alumni', 'error');
+    // Fallback ke localStorage
+    const data = DemoHelper.getAlumni();
+    populateAlumniSelect(data);
+    console.warn('Alumni options menggunakan mode demo/localStorage:', err);
+  }
+}
+
+function populateAlumniSelect(data) {
+  const select = document.getElementById('alumniSelect');
+
+  data.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.id;
+    opt.textContent = `${a.nama} — ${a.program_studi} (${a.tahun_lulus})`;
+    select.appendChild(opt);
+  });
+
+  // Check if URL has alumni ID preselected
+  const params = new URLSearchParams(window.location.search);
+  const preselectedId = params.get('id');
+  if (preselectedId) {
+    select.value = preselectedId;
+    document.getElementById('startTracking').disabled = false;
+    loadExistingResults(preselectedId);
   }
 }
 
@@ -67,6 +74,7 @@ document.getElementById('alumniSelect').addEventListener('change', function () {
 async function loadExistingResults(alumniId) {
   try {
     const res = await fetch(`${API}/api/tracking/${alumniId}/results`);
+    if (!res.ok) throw new Error('API gagal');
     const results = await res.json();
 
     if (results.length > 0) {
@@ -75,7 +83,14 @@ async function loadExistingResults(alumniId) {
       renderCandidates(results);
     }
   } catch (err) {
-    // silently fail, user can run new tracking
+    // Fallback ke localStorage
+    const results = DemoHelper.getTrackingResultsForAlumni(alumniId);
+    if (results.length > 0) {
+      document.getElementById('emptyState').style.display = 'none';
+      document.getElementById('resultsSection').style.display = 'block';
+      renderCandidates(results);
+    }
+    console.warn('Existing results menggunakan mode demo/localStorage:', err);
   }
 }
 
@@ -95,32 +110,51 @@ document.getElementById('startTracking').addEventListener('click', async () => {
 
   try {
     const res = await fetch(`${API}/api/tracking/${alumniId}/search`, { method: 'POST' });
+    if (!res.ok) throw new Error('API gagal');
     const data = await res.json();
 
-    // Show queries
-    const queryList = document.getElementById('queryList');
-    queryList.innerHTML = data.queries.map(q => `
-      <span class="query-tag">🔗 ${q}</span>
-    `).join('');
-    document.getElementById('queriesSection').style.display = 'block';
-
-    // Show status
-    document.getElementById('statusBadge').innerHTML = getStatusBadge(data.status);
-
-    // Show results
-    renderCandidates(data.results);
-    document.getElementById('resultsSection').style.display = 'block';
-
+    showTrackingResults(data);
     showToast(`Tracking selesai! ${data.results.length} kandidat ditemukan.`);
   } catch (err) {
-    showToast('Gagal melakukan tracking', 'error');
-    console.error(err);
+    // Fallback: simulasi tracking via localStorage
+    const alumni = DemoHelper.getAlumniById(alumniId);
+    if (!alumni) {
+      showToast('Alumni tidak ditemukan', 'error');
+      document.getElementById('loadingState').style.display = 'none';
+      btn.disabled = false;
+      btn.innerHTML = '🔍 Mulai Tracking';
+      return;
+    }
+
+    // Simulasi delay untuk efek realistis
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    const data = DemoHelper.simulateTracking(alumni);
+    showTrackingResults(data);
+    showToast(`Tracking selesai! ${data.results.length} kandidat ditemukan. (mode demo)`);
+    console.warn('Tracking menggunakan mode demo/localStorage:', err);
   } finally {
     document.getElementById('loadingState').style.display = 'none';
     btn.disabled = false;
     btn.innerHTML = '🔍 Mulai Tracking';
   }
 });
+
+function showTrackingResults(data) {
+  // Show queries
+  const queryList = document.getElementById('queryList');
+  queryList.innerHTML = data.queries.map(q => `
+    <span class="query-tag">🔗 ${q}</span>
+  `).join('');
+  document.getElementById('queriesSection').style.display = 'block';
+
+  // Show status
+  document.getElementById('statusBadge').innerHTML = getStatusBadge(data.status);
+
+  // Show results
+  renderCandidates(data.results);
+  document.getElementById('resultsSection').style.display = 'block';
+}
 
 function renderCandidates(results) {
   const container = document.getElementById('candidatesList');
@@ -184,16 +218,22 @@ async function verifyCandidate(resultId, status) {
       body: JSON.stringify({ status }),
     });
 
-    if (res.ok) {
-      showToast(status === 'verified' ? 'Kandidat berhasil diverifikasi!' : 'Kandidat ditolak.');
-      // Reload results
+    if (!res.ok) throw new Error('API gagal');
+
+    showToast(status === 'verified' ? 'Kandidat berhasil diverifikasi!' : 'Kandidat ditolak.');
+    const alumniId = document.getElementById('alumniSelect').value;
+    if (alumniId) loadExistingResults(alumniId);
+  } catch (err) {
+    // Fallback ke localStorage
+    const success = DemoHelper.verifyCandidate(resultId, status);
+    if (success) {
+      showToast(status === 'verified' ? 'Kandidat berhasil diverifikasi! (mode demo)' : 'Kandidat ditolak. (mode demo)');
       const alumniId = document.getElementById('alumniSelect').value;
       if (alumniId) loadExistingResults(alumniId);
     } else {
       showToast('Gagal memverifikasi kandidat', 'error');
     }
-  } catch (err) {
-    showToast('Gagal memverifikasi kandidat', 'error');
+    console.warn('Verifikasi menggunakan mode demo/localStorage:', err);
   }
 }
 

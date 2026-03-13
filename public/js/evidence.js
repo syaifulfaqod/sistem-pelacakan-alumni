@@ -18,23 +18,31 @@ function getScoreClass(score) {
 async function loadEvidence() {
   try {
     const res = await fetch(`${API}/api/evidence`);
+    if (!res.ok) throw new Error('API gagal');
     allEvidence = await res.json();
     renderEvidence(allEvidence);
-
-    // Populate alumni filter
-    const alumniNames = [...new Set(allEvidence.map(e => JSON.stringify({ id: e.alumni_id, nama: e.alumni_nama })))];
-    const select = document.getElementById('filterAlumni');
-    alumniNames.forEach(a => {
-      const parsed = JSON.parse(a);
-      const opt = document.createElement('option');
-      opt.value = parsed.id;
-      opt.textContent = parsed.nama;
-      select.appendChild(opt);
-    });
+    populateAlumniFilter(allEvidence);
   } catch (err) {
-    showToast('Gagal memuat data evidence', 'error');
-    console.error(err);
+    // Fallback ke localStorage
+    allEvidence = DemoHelper.getEvidence();
+    renderEvidence(allEvidence);
+    populateAlumniFilter(allEvidence);
+    console.warn('Evidence menggunakan mode demo/localStorage:', err);
   }
+}
+
+function populateAlumniFilter(data) {
+  const alumniNames = [...new Set(data.map(e => JSON.stringify({ id: e.alumni_id, nama: e.alumni_nama })))];
+  const select = document.getElementById('filterAlumni');
+  // Reset options (keep first "Semua Alumni" option)
+  select.innerHTML = '<option value="">Semua Alumni</option>';
+  alumniNames.forEach(a => {
+    const parsed = JSON.parse(a);
+    const opt = document.createElement('option');
+    opt.value = parsed.id;
+    opt.textContent = parsed.nama;
+    select.appendChild(opt);
+  });
 }
 
 function renderEvidence(data) {

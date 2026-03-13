@@ -65,6 +65,7 @@ SistemPelacakanAlumni/
     ├── css/
     │   └── style.css            # Global styles
     └── js/
+        ├── demo-helper.js       # Shared localStorage helper (fallback demo)
         ├── dashboard.js
         ├── input.js
         ├── tracking.js
@@ -141,6 +142,21 @@ vercel
 
 ---
 
+## ⚠️ Catatan Deployment (Demo Mode)
+
+> **Aplikasi ini merupakan prototype/demo untuk tugas kuliah Rekayasa Kebutuhan (Daily Project).**
+
+Karena keterbatasan platform Vercel untuk menjalankan SQLite secara persisten, frontend dilengkapi dengan **fallback mode demo berbasis localStorage**:
+
+- Jika API backend tersedia → data diambil dari server (SQLite)
+- Jika API backend gagal → data otomatis diambil/disimpan ke **localStorage** browser
+- Tracking alumni menggunakan **simulasi pencocokan identitas** yang menghasilkan kandidat, skor kecocokan, dan sumber evidence secara realistis
+- Data demo tersimpan di browser pengguna dan akan hilang jika cache browser dibersihkan
+
+Mode demo ini memungkinkan seluruh fitur utama tetap dapat didemokan secara online tanpa bergantung pada ketersediaan backend.
+
+---
+
 ## 📡 API Endpoints
 
 | Method | Endpoint | Deskripsi |
@@ -162,25 +178,27 @@ vercel
 
 ## 🧪 Tabel Pengujian Kualitas Aplikasi
 
-| No | Aspek Pengujian | Skenario | Hasil |
-|----|----------------|----------|-------|
-| 1 | Fungsionalitas | Menambah data alumni melalui form input | ✅ Berhasil |
-| 2 | Fungsionalitas | Menghapus data alumni dari daftar | ✅ Berhasil |
-| 3 | Fungsionalitas | Mencari alumni berdasarkan nama | ✅ Berhasil |
-| 4 | Fungsionalitas | Menjalankan tracking alumni | ✅ Berhasil |
-| 5 | Fungsionalitas | Menampilkan skor kecocokan identitas | ✅ Berhasil |
-| 6 | Fungsionalitas | Verifikasi/tolak kandidat alumni | ✅ Berhasil |
-| 7 | Fungsionalitas | Generate search query otomatis | ✅ Berhasil |
-| 8 | Usability | User dapat menggunakan form input dengan mudah | ✅ Baik |
-| 9 | Usability | Navigasi antar halaman lancar | ✅ Baik |
-| 10 | Usability | Status badge mudah dibedakan secara visual | ✅ Baik |
-| 11 | Performance | Dashboard memuat statistik | ✅ Normal (<1 detik) |
-| 12 | Performance | Tracking alumni berjalan dan menampilkan hasil | ✅ Normal |
-| 13 | Reliability | Data alumni tersimpan di database SQLite | ✅ Berhasil |
-| 14 | Reliability | Riwayat tracking tercatat | ✅ Berhasil |
-| 15 | Reliability | Evidence sumber data tersimpan | ✅ Berhasil |
-| 16 | Responsiveness | Tampilan responsif di mobile | ✅ Baik |
-| 17 | Security | API menggunakan helmet untuk keamanan header | ✅ Aman |
+| No | Aspek Pengujian | Skenario | Hasil | Keterangan |
+|----|----------------|----------|-------|------------|
+| 1 | Fungsionalitas | Menambah data alumni melalui form input | ✅ Berhasil | API + fallback localStorage |
+| 2 | Fungsionalitas | Menghapus data alumni dari daftar | ✅ Berhasil | API + fallback localStorage |
+| 3 | Fungsionalitas | Mencari alumni berdasarkan nama | ✅ Berhasil | API + fallback localStorage |
+| 4 | Fungsionalitas | Menjalankan tracking alumni | ✅ Berhasil | API + simulasi demo jika API gagal |
+| 5 | Fungsionalitas | Menampilkan skor kecocokan identitas | ✅ Berhasil | Skor deterministic & probabilistic |
+| 6 | Fungsionalitas | Verifikasi/tolak kandidat alumni | ✅ Berhasil | API + fallback localStorage |
+| 7 | Fungsionalitas | Generate search query otomatis | ✅ Berhasil | Berdasarkan profil alumni |
+| 8 | Fungsionalitas | Dashboard menampilkan statistik | ✅ Berhasil | Data dari API/localStorage |
+| 9 | Fungsionalitas | Evidence menampilkan bukti sumber | ✅ Berhasil | Dari hasil tracking tersimpan |
+| 10 | Fungsionalitas | Riwayat tracking tercatat | ✅ Berhasil | Log otomatis setiap tracking |
+| 11 | Usability | User dapat menggunakan form input dengan mudah | ✅ Baik | Form validasi lengkap |
+| 12 | Usability | Navigasi antar halaman lancar | ✅ Baik | Sidebar navigation |
+| 13 | Usability | Status badge mudah dibedakan secara visual | ✅ Baik | Warna berbeda per status |
+| 14 | Performance | Dashboard memuat statistik | ✅ Normal (<1 detik) | Instant di mode demo |
+| 15 | Performance | Tracking alumni berjalan dan menampilkan hasil | ✅ Normal | ~1.5 detik simulasi |
+| 16 | Reliability | Data tersimpan dan persisten selama cache browser tidak dihapus | ✅ Berhasil | localStorage sebagai fallback |
+| 17 | Reliability | Fallback otomatis jika API backend tidak tersedia | ✅ Berhasil | Semua halaman punya fallback |
+| 18 | Responsiveness | Tampilan responsif di mobile | ✅ Baik | CSS responsive |
+| 19 | Security | API menggunakan helmet untuk keamanan header | ✅ Aman | Backend Express.js |
 
 ---
 
