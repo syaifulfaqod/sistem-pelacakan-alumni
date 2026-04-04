@@ -63,8 +63,8 @@ const insertUser = db.prepare(`
 `);
 
 const insertExtended = db.prepare(`
-  INSERT INTO alumni_extended (user_id, nama, nim, tahun_lulus, fakultas, program_studi, tempat_kerja, posisi, kategori_pekerjaan, kota_domisili, kontak, sosial_media, consent_status, consent_timestamp)
-  VALUES (@user_id, @nama, @nim, @tahun_lulus, @fakultas, @program_studi, @tempat_kerja, @posisi, @kategori_pekerjaan, @kota_domisili, @kontak, @sosial_media, @consent_status, @consent_timestamp)
+  INSERT INTO alumni_extended (user_id, nama, nim, tahun_lulus, fakultas, program_studi, email, no_hp, sosmed_linkedin, sosmed_ig, sosmed_fb, sosmed_tiktok, tempat_kerja, alamat_bekerja, posisi, kategori_pekerjaan, sosmed_tempat_bekerja, consent_status, consent_timestamp)
+  VALUES (@user_id, @nama, @nim, @tahun_lulus, @fakultas, @program_studi, @email, @no_hp, @sosmed_linkedin, @sosmed_ig, @sosmed_fb, @sosmed_tiktok, @tempat_kerja, @alamat_bekerja, @posisi, @kategori_pekerjaan, @sosmed_tempat_bekerja, @consent_status, @consent_timestamp)
 `);
 
 const seedAll = db.transaction(() => {
@@ -82,12 +82,17 @@ const seedAll = db.transaction(() => {
       tahun_lulus: 2020,
       fakultas: 'Teknik',
       program_studi: 'Teknik Informatika',
+      email: 'ahmad.f@example.com',
+      no_hp: '081234567890',
+      sosmed_linkedin: 'linkedin.com/in/ahmadf',
+      sosmed_ig: '@ahmadf',
+      sosmed_fb: 'Ahmad Fauzi',
+      sosmed_tiktok: '@ahmadf_tik',
       tempat_kerja: 'PT Tokopedia',
+      alamat_bekerja: 'Gedung Tokopedia, Jakarta Selatan',
       posisi: 'Software Engineer',
       kategori_pekerjaan: 'Swasta',
-      kota_domisili: 'Jakarta',
-      kontak: '',
-      sosial_media: '',
+      sosmed_tempat_bekerja: '@tokopedia',
       consent_status: 1,
       consent_timestamp: new Date().toISOString()
     },
@@ -98,12 +103,17 @@ const seedAll = db.transaction(() => {
       tahun_lulus: 2019,
       fakultas: 'Teknik',
       program_studi: 'Sistem Informasi',
+      email: 'siti.n@example.com',
+      no_hp: '081987654321',
+      sosmed_linkedin: 'linkedin.com/in/sitin',
+      sosmed_ig: '@sitinur',
+      sosmed_fb: 'Siti Nurhaliza',
+      sosmed_tiktok: '@sitin_real',
       tempat_kerja: 'Bank BCA',
+      alamat_bekerja: 'Menara BCA, Jakarta Pusat',
       posisi: 'Data Analyst',
       kategori_pekerjaan: 'Swasta',
-      kota_domisili: 'Bandung',
-      kontak: '',
-      sosial_media: '',
+      sosmed_tempat_bekerja: '@goodlifebca',
       consent_status: 1,
       consent_timestamp: new Date().toISOString()
     }

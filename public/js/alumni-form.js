@@ -57,11 +57,16 @@ async function loadExistingData() {
       document.getElementById('ext_fakultas').value = data.fakultas || '';
       document.getElementById('ext_prodi').value = data.program_studi || '';
       document.getElementById('ext_tempat_kerja').value = data.tempat_kerja || '';
+      document.getElementById('ext_alamat_bekerja').value = data.alamat_bekerja || '';
       document.getElementById('ext_posisi').value = data.posisi || '';
       document.getElementById('ext_kategori').value = data.kategori_pekerjaan || '';
-      document.getElementById('ext_kota').value = data.kota_domisili || '';
-      document.getElementById('ext_kontak').value = data.kontak || '';
-      document.getElementById('ext_sosmed').value = data.sosial_media || '';
+      document.getElementById('ext_email').value = data.email || '';
+      document.getElementById('ext_no_hp').value = data.no_hp || '';
+      document.getElementById('ext_sosmed_linkedin').value = data.sosmed_linkedin || '';
+      document.getElementById('ext_sosmed_ig').value = data.sosmed_ig || '';
+      document.getElementById('ext_sosmed_fb').value = data.sosmed_fb || '';
+      document.getElementById('ext_sosmed_tiktok').value = data.sosmed_tiktok || '';
+      document.getElementById('ext_sosmed_tempat_bekerja').value = data.sosmed_tempat_bekerja || '';
     }
   } catch (err) {
     console.error('Error loading data:', err);
@@ -109,11 +114,16 @@ document.getElementById('alumniExtForm').addEventListener('submit', async (e) =>
     fakultas: document.getElementById('ext_fakultas').value,
     program_studi: document.getElementById('ext_prodi').value.trim(),
     tempat_kerja: document.getElementById('ext_tempat_kerja').value.trim(),
+    alamat_bekerja: document.getElementById('ext_alamat_bekerja').value.trim(),
     posisi: document.getElementById('ext_posisi').value.trim(),
     kategori_pekerjaan: document.getElementById('ext_kategori').value,
-    kota_domisili: document.getElementById('ext_kota').value.trim(),
-    kontak: document.getElementById('ext_kontak').value.trim(),
-    sosial_media: document.getElementById('ext_sosmed').value.trim(),
+    email: document.getElementById('ext_email').value.trim(),
+    no_hp: document.getElementById('ext_no_hp').value.trim(),
+    sosmed_linkedin: document.getElementById('ext_sosmed_linkedin').value.trim(),
+    sosmed_ig: document.getElementById('ext_sosmed_ig').value.trim(),
+    sosmed_fb: document.getElementById('ext_sosmed_fb').value.trim(),
+    sosmed_tiktok: document.getElementById('ext_sosmed_tiktok').value.trim(),
+    sosmed_tempat_bekerja: document.getElementById('ext_sosmed_tempat_bekerja').value.trim(),
     consent: true
   };
 

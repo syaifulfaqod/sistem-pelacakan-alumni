@@ -18,8 +18,9 @@ router.post('/submit', authMiddleware, (req, res) => {
   try {
     const {
       nama, nim, tahun_lulus, fakultas, program_studi,
-      tempat_kerja, posisi, kategori_pekerjaan,
-      kota_domisili, kontak, sosial_media, consent
+      email, no_hp, sosmed_linkedin, sosmed_ig, sosmed_fb, sosmed_tiktok,
+      tempat_kerja, alamat_bekerja, posisi, kategori_pekerjaan,
+      sosmed_tempat_bekerja, consent
     } = req.body;
 
     // Validate required fields
@@ -46,27 +47,27 @@ router.post('/submit', authMiddleware, (req, res) => {
       db.prepare(`
         UPDATE alumni_extended SET 
           nama = ?, nim = ?, tahun_lulus = ?, fakultas = ?, program_studi = ?,
-          tempat_kerja = ?, posisi = ?, kategori_pekerjaan = ?,
-          kota_domisili = ?, kontak = ?, sosial_media = ?,
+          email = ?, no_hp = ?, sosmed_linkedin = ?, sosmed_ig = ?, sosmed_fb = ?, sosmed_tiktok = ?,
+          tempat_kerja = ?, alamat_bekerja = ?, posisi = ?, kategori_pekerjaan = ?, sosmed_tempat_bekerja = ?,
           consent_status = 1, consent_timestamp = datetime('now'),
           updated_at = datetime('now')
         WHERE user_id = ?
       `).run(
         nama, nim || '', tahun_lulus, fakultas || '', program_studi || '',
-        tempat_kerja || '', posisi || '', kategori_pekerjaan || '',
-        kota_domisili || '', kontak || '', sosial_media || '',
+        email || '', no_hp || '', sosmed_linkedin || '', sosmed_ig || '', sosmed_fb || '', sosmed_tiktok || '',
+        tempat_kerja || '', alamat_bekerja || '', posisi || '', kategori_pekerjaan || '', sosmed_tempat_bekerja || '',
         req.user.userId
       );
     } else {
       // Insert
       db.prepare(`
-        INSERT INTO alumni_extended (user_id, nama, nim, tahun_lulus, fakultas, program_studi, tempat_kerja, posisi, kategori_pekerjaan, kota_domisili, kontak, sosial_media, consent_status, consent_timestamp)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
+        INSERT INTO alumni_extended (user_id, nama, nim, tahun_lulus, fakultas, program_studi, email, no_hp, sosmed_linkedin, sosmed_ig, sosmed_fb, sosmed_tiktok, tempat_kerja, alamat_bekerja, posisi, kategori_pekerjaan, sosmed_tempat_bekerja, consent_status, consent_timestamp)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
       `).run(
         req.user.userId,
         nama, nim || '', tahun_lulus, fakultas || '', program_studi || '',
-        tempat_kerja || '', posisi || '', kategori_pekerjaan || '',
-        kota_domisili || '', kontak || '', sosial_media || ''
+        email || '', no_hp || '', sosmed_linkedin || '', sosmed_ig || '', sosmed_fb || '', sosmed_tiktok || '',
+        tempat_kerja || '', alamat_bekerja || '', posisi || '', kategori_pekerjaan || '', sosmed_tempat_bekerja || ''
       );
     }
 

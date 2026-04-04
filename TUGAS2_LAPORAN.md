@@ -98,11 +98,13 @@ node scripts/data-cleaning.js    # Cleaning data
 | Fakultas | Select | - | 16 pilihan |
 | Program Studi | Text | - | Input bebas |
 | Tempat Bekerja | Text | - | Nama perusahaan/instansi |
+| Alamat Bekerja | Text | - | Alamat lengkap perusahaan |
 | Posisi / Jabatan | Text | - | Posisi saat ini |
 | Kategori Pekerjaan | Select | - | PNS / Swasta / Wirausaha / Lainnya |
-| Kota Domisili Kerja | Text | - | Kota tempat kerja |
-| Kontak | Text | - | Opsional |
-| Sosial Media | Text | - | Opsional |
+| Sosial Media Tempat Bekerja | Text | - | Opsional |
+| Email | Email | - | Opsional |
+| No HP | Text | - | Opsional |
+| Sosial Media Pribadi | Text | - | LinkedIn, IG, FB, TikTok |
 | Persetujuan Data | Checkbox | ✅ | Wajib sebelum simpan |
 
 ### 2. Sistem Login
@@ -157,12 +159,17 @@ CREATE TABLE alumni_extended (
   tahun_lulus INTEGER,
   fakultas TEXT,
   program_studi TEXT,
-  tempat_kerja TEXT,             -- Field baru
-  posisi TEXT,                   -- Field baru
-  kategori_pekerjaan TEXT,       -- PNS/Swasta/Wirausaha/Lainnya
-  kota_domisili TEXT,            -- Field baru
-  kontak TEXT,                   -- Opsional
-  sosial_media TEXT,             -- Opsional
+  email TEXT,
+  no_hp TEXT,
+  sosmed_linkedin TEXT,
+  sosmed_ig TEXT,
+  sosmed_fb TEXT,
+  sosmed_tiktok TEXT,
+  tempat_kerja TEXT,
+  alamat_bekerja TEXT,
+  posisi TEXT,
+  kategori_pekerjaan TEXT,
+  sosmed_tempat_bekerja TEXT,
   consent_status INTEGER,
   consent_timestamp DATETIME,
   FOREIGN KEY (user_id) REFERENCES users(id)

@@ -100,7 +100,7 @@ function renderTable(data) {
         <td>${item.tempat_kerja || '-'}</td>
         <td>${item.posisi || '-'}</td>
         <td><span class="badge-kategori ${kategoriClass}">${item.kategori_pekerjaan || '-'}</span></td>
-        <td>${item.kota_domisili || '-'}</td>
+        <td>${item.email || '-'}</td>
         <td>
           <button class="btn btn-sm btn-secondary" onclick='showDetail(${JSON.stringify(item).replace(/'/g, "&apos;")})'>👁️</button>
         </td>
@@ -116,7 +116,7 @@ function filterData() {
     const matchSearch = !search || 
       item.nama.toLowerCase().includes(search) ||
       (item.tempat_kerja || '').toLowerCase().includes(search) ||
-      (item.kota_domisili || '').toLowerCase().includes(search);
+      (item.email || '').toLowerCase().includes(search);
     const matchKategori = !kategori || item.kategori_pekerjaan === kategori;
     return matchSearch && matchKategori;
   });
@@ -135,9 +135,14 @@ function showDetail(item) {
     { label: 'Tempat Kerja', value: item.tempat_kerja || '-' },
     { label: 'Posisi', value: item.posisi || '-' },
     { label: 'Kategori', value: item.kategori_pekerjaan || '-' },
-    { label: 'Kota Domisili', value: item.kota_domisili || '-' },
-    { label: 'Kontak', value: item.kontak || '(tidak diisi)' },
-    { label: 'Sosial Media', value: item.sosial_media || '(tidak diisi)' },
+    { label: 'Email', value: item.email || '(tidak diisi)' },
+    { label: 'No HP', value: item.no_hp || '(tidak diisi)' },
+    { label: 'LinkedIn', value: item.sosmed_linkedin || '-' },
+    { label: 'Instagram', value: item.sosmed_ig || '-' },
+    { label: 'Facebook', value: item.sosmed_fb || '-' },
+    { label: 'TikTok', value: item.sosmed_tiktok || '-' },
+    { label: 'Alamat Bekerja', value: item.alamat_bekerja || '-' },
+    { label: 'Sosmed Tempat Kerja', value: item.sosmed_tempat_bekerja || '-' },
     { label: 'Consent', value: item.consent_status ? '✅ Disetujui' : '❌ Belum' },
   ];
 
