@@ -38,7 +38,7 @@ Aplikasi web untuk melacak informasi alumni dari berbagai sumber publik di inter
 | **Evidence / Bukti** | Halaman bukti sumber data dengan link ke sumber asli |
 | **Riwayat Tracking** | Log seluruh aktivitas tracking yang pernah dilakukan |
 
----
+--
 
 ## 🛠️ Teknologi
 
@@ -222,6 +222,8 @@ MIT License — Bebas digunakan untuk keperluan akademik.
 ## 👤 Pembuat
 
 **Syaiful Hidayat** — 202310370311169 , Mata Kuliah Rekayasa Kebutuhan C
-#   s i s t e m - p e l a c a k a n - a l u m n i - 2  
- #   s i s t e m - p e l a c a k a n - a l u m n i - 2  
+#   s i s t e m - p e l a c a k a n - a l u m n i - 2 
+ 
+ #   s i s t e m - p e l a c a k a n - a l u m n i - 2 
+ 
  
