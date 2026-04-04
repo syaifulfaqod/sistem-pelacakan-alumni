@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Login - Sistem Pelacakan Alumni">
+  <title>Login — Sistem Pelacakan Alumni</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 440px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-lg);
+      animation: fadeInUp 0.6s ease forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo .icon {
+      font-size: 56px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .login-logo h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+
+    .login-logo p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-color);
+    }
+
+    .login-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      color: var(--status-notfound);
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .login-error.show {
+      display: block;
+      animation: fadeInUp 0.3s ease;
+    }
+
+    .login-info {
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 24px;
+    }
+
+    .login-info h4 {
+      color: var(--accent-purple);
+      font-size: 13px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .login-info p {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .login-info code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--accent-blue);
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .login-footer a {
+      color: var(--accent-purple);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="icon">🎓</span>
+        <h1>Alumni Tracker</h1>
+        <p>Sistem Pelacakan Alumni — Login</p>
+      </div>
+
+      <div class="login-error" id="loginError"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="identifier">Email atau NIM</label>
+          <input type="text" class="form-control" id="identifier" name="identifier" placeholder="Masukkan email atau NIM" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required autocomplete="current-password">
+            <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;" id="loginBtn">
+          🔐 Masuk
+        </button>
+      </form>
+
+      <div class="login-info">
+        <h4>🔑 Akun Demo</h4>
+        <p>
+          <strong>Admin:</strong> <code>admin@alumni.ac.id</code> / <code>admin123</code><br>
+          <strong>Alumni:</strong> <code>20200001</code> / <code>alumni123</code><br>
+          <strong>Alumni:</strong> <code>20190002</code> / <code>alumni123</code><br>
+          <strong>Alumni:</strong> <code>20210003</code> / <code>alumni123</code>
+        </p>
+      </div>
+
+      <div class="login-footer">
+        <a href="/index.html">← Kembali ke Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="/js/login.js"></script>
+</body>
+</html>

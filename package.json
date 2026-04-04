@@ -8,7 +8,11 @@
     "dev": "node server.js",
     "seed": "node database/seed.js"
   },
-  "keywords": ["alumni", "tracking", "university"],
+  "keywords": [
+    "alumni",
+    "tracking",
+    "university"
+  ],
   "author": "Syaiful Hidayat",
   "license": "MIT",
   "dependencies": {
@@ -16,5 +20,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "helmet": "^7.1.0"
+  },
+  "devDependencies": {
+    "xlsx": "^0.18.5"
   }
 }

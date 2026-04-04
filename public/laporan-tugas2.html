@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Laporan TUGAS 2 - Analisis Data Alumni">
+  <title>Laporan TUGAS 2 — Sistem Pelacakan Alumni</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .report-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    .report-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .report-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
+
+    .report-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .report-header h2 {
+      font-size: 18px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .report-header p {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-header .section-letter {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--gradient-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+
+    .report-table th {
+      background: rgba(99, 102, 241, 0.08);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .report-table td {
+      padding: 10px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .report-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .pct-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pct-bar-fill {
+      height: 6px;
+      border-radius: 100px;
+      background: var(--gradient-teal);
+      transition: width 1s ease;
+    }
+
+    .pct-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 100px;
+      overflow: hidden;
+      max-width: 200px;
+    }
+
+    .pct-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-teal);
+      min-width: 50px;
+      text-align: right;
+    }
+
+    .missing-tag {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--status-notfound);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .available-tag {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--status-identified);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      padding: 24px;
+      margin: 16px 0;
+    }
+
+    .flow-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      text-align: center;
+      min-width: 140px;
+      transition: var(--transition);
+    }
+
+    .flow-step:hover {
+      border-color: var(--border-glow);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-2px);
+    }
+
+    .flow-step .step-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .flow-step .step-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .flow-step .step-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .flow-arrow {
+      font-size: 24px;
+      color: var(--accent-purple);
+      padding: 0 12px;
+    }
+
+    .info-box {
+      background: rgba(99, 102, 241, 0.06);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      color: var(--text-primary);
+    }
+
+    .warning-box {
+      background: rgba(245, 158, 11, 0.06);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .db-schema {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      overflow-x: auto;
+    }
+
+    .db-schema .keyword {
+      color: var(--accent-purple);
+      font-weight: 600;
+    }
+
+    .db-schema .type {
+      color: var(--accent-blue);
+    }
+
+    .db-schema .comment {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .nav-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .badge-count {
+      display: inline-flex;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 24px;
+      font-weight: 800;
+      background: rgba(129, 140, 248, 0.1);
+      color: var(--accent-purple);
+      border: 1px solid rgba(129, 140, 248, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="report-page">
+    <!-- Navigation -->
+    <div class="nav-top">
+      <a href="/index.html" class="btn btn-secondary btn-sm">← Dashboard</a>
+      <div class="flex gap-12">
+        <a href="/login.html" class="btn btn-primary btn-sm">🔐 Login Sistem</a>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="report-header animate-in">
+      <h1>📊 TUGAS 2 — Laporan Analisis Data Alumni</h1>
+      <h2>Sistem Pelacakan Alumni</h2>
+      <p>Oleh: Syaiful Hidayat · Rekayasa Kebutuhan · April 2026</p>
+    </div>
+
+    <!-- A. ANALISIS DATA -->
+    <div class="section card animate-in">
+      <div class="section-header">
+        <div class="section-letter">A</div>
+        <h2>Analisis Data</h2>
+      </div>
+
+      <div class="info-box mb-16">
+        <strong>Sumber Data:</strong> File <code>Alumni 2000-2025.xlsx.ods</code><br>
+        <strong>Total Records:</strong> <span class="badge-count" style="font-size:14px;padding:2px 10px;">142.292</span> data alumni<br>
+        <strong>Jumlah Kolom:</strong> 6 kolom
+      </div>
+
+      <h4 style="margin:16px 0 12px;color:var(--text-secondary);">Daftar Kolom yang Tersedia</h4>
+      <div class="table-container">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Kolom</th>
+              <th>Terisi</th>
+              <th>Kosong</th>
+              <th>Kelengkapan</th>
+              <th>Nilai Unik</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><strong>Nama Lulusan</strong></td>
+              <td>142.292</td>
+              <td>0</td>
+              <td>
+                <div class="pct-bar">
+                  <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:100%"></div></div>
+                  <span class="pct-value">100.0%</span>
+                </div>
+              </td>
+              <td>125.153</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><strong>NIM</strong></td>
+              <td>142.292</td>
+              <td>0</td>
+              <td>
+                <div class="pct-bar">
+                  <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:100%"></div></div>
+                  <span class="pct-value">100.0%</span>
+                </div>
+              </td>
+              <td>142.122</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><strong>Tahun Masuk</strong></td>
+              <td>142.292</td>
+              <td>0</td>
+              <td>
+                <div class="pct-bar">
+                  <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:100%"></div></div>
+                  <span class="pct-value">100.0%</span>
+                </div>
+              </td>
+              <td>39</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><strong>Tanggal Lulus</strong></td>
+              <td>142.290</td>
+              <td>2</td>
+              <td>
+                <div class="pct-bar">
+                  <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:99.99%"></div></div>
+                  <span class="pct-value">~100.0%</span>
+                </div>
+              </td>
+              <td>3.585</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><strong>Fakultas</strong></td>
+              <td>142.292</td>
+              <td>0</td>
+              <td>
+                <div class="pct-bar">
+                  <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:100%"></div></div>
+                  <span class="pct-value">100.0%</span>
+                </div>
+              </td>
+              <td>16</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><strong>Program Studi</strong></td>
+              <td>142.292</td>
+              <td>0</td>
+              <td>
+                <div class="pct-bar">
+                  <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:100%"></div></div>
+                  <span class="pct-value">100.0%</span>
+                </div>
+              </td>
+              <td>106</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="margin:24px 0 12px;color:var(--text-secondary);">Distribusi Fakultas (16 Fakultas)</h4>
+      <div class="table-container">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Fakultas</th>
+              <th>Jumlah Alumni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Keguruan dan Ilmu Pendidikan</td><td>~35.000+</td></tr>
+            <tr><td>2</td><td>Ekonomi / Ekonomi dan Bisnis</td><td>~25.000+</td></tr>
+            <tr><td>3</td><td>Agama Islam</td><td>~18.000+</td></tr>
+            <tr><td>4</td><td>Teknik</td><td>~15.000+</td></tr>
+            <tr><td>5</td><td>Hukum</td><td>~10.000+</td></tr>
+            <tr><td>6</td><td>Pertanian / Pertanian dan Peternakan</td><td>~9.000+</td></tr>
+            <tr><td>7</td><td>Ilmu Sosial dan Ilmu Politik</td><td>~8.000+</td></tr>
+            <tr><td>8</td><td>Psikologi</td><td>~5.000+</td></tr>
+            <tr><td>9</td><td>Peternakan / Peternakan dan Perikanan</td><td>~4.000+</td></tr>
+            <tr><td>10</td><td>Kedokteran</td><td>~3.000+</td></tr>
+            <tr><td>11</td><td>Ilmu Kesehatan</td><td>~3.000+</td></tr>
+            <tr><td>12</td><td>Pascasarjana</td><td>~3.000+</td></tr>
+            <tr><td>13</td><td>Vokasi</td><td>~2.000+</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- B. DATA CLEANING -->
+    <div class="section card animate-in">
+      <div class="section-header">
+        <div class="section-letter">B</div>
+        <h2>Data Cleaning</h2>
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">Perbaikan Format yang Dilakukan</h4>
+
+      <div class="table-container mb-16">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Jenis Cleaning</th>
+              <th>Deskripsi</th>
+              <th>Contoh Before → After</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Nama (Kapitalisasi)</strong></td>
+              <td>Standarisasi Title Case untuk semua nama</td>
+              <td><code>AHMAD FAUZI</code> → <code>Ahmad Fauzi</code><br><code>siti nurhaliza</code> → <code>Siti Nurhaliza</code></td>
+            </tr>
+            <tr>
+              <td><strong>Tanggal (Standarisasi)</strong></td>
+              <td>Perbaikan penulisan bulan: "Nopember"→"November", "Pebruari"→"Februari"</td>
+              <td><code>1 Nopember 2000</code> → <code>1 November 2000</code><br><code>3 Pebruari 2001</code> → <code>3 Februari 2001</code></td>
+            </tr>
+            <tr>
+              <td><strong>Fakultas (Standarisasi)</strong></td>
+              <td>Konsistensi penulisan nama fakultas</td>
+              <td><code>Peternakan - Perikanan</code> → <code>Peternakan dan Perikanan</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">Identifikasi Data Duplikat</h4>
+      <div class="info-box mb-16">
+        <strong>Duplikat berdasarkan NIM:</strong> ~170 entri NIM yang muncul lebih dari satu kali<br>
+        <strong>Duplikat berdasarkan Nama:</strong> 11.720 nama yang sama (namun bisa merupakan orang berbeda dari prodi/angkatan berbeda)<br><br>
+        ⚠️ <strong>Catatan:</strong> Duplikat nama belum tentu merupakan data yang salah. Nama umum seperti "Sri Wahyuni" (81 kali), "Uswatun Hasanah" (53 kali), dan "Siti Fatimah" (48 kali) muncul banyak karena memang merupakan nama yang sangat umum di Indonesia, bukan data duplikat. Duplikat NIM perlu investigasi lebih lanjut.
+      </div>
+    </div>
+
+    <!-- C. DATA KOSONG -->
+    <div class="section card animate-in">
+      <div class="section-header">
+        <div class="section-letter">C</div>
+        <h2>Data Kosong</h2>
+      </div>
+
+      <div class="warning-box mb-16">
+        ⚠️ File alumni hanya berisi data akademik (nama, NIM, tahun masuk, tanggal lulus, fakultas, prodi). 
+        <strong>Tidak terdapat data pekerjaan, kontak, atau informasi paska-lulus</strong> dalam file sumber.
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">Kolom yang Tersedia vs Tidak Tersedia</h4>
+      <div class="table-container mb-16">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Kategori</th>
+              <th>Status</th>
+              <th>Data Kosong</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Nama Lulusan</td><td>Akademik</td>
+              <td><span class="available-tag">✅ Tersedia</span></td>
+              <td>0 / 142.292</td>
+            </tr>
+            <tr>
+              <td>NIM</td><td>Akademik</td>
+              <td><span class="available-tag">✅ Tersedia</span></td>
+              <td>0 / 142.292</td>
+            </tr>
+            <tr>
+              <td>Tahun Masuk</td><td>Akademik</td>
+              <td><span class="available-tag">✅ Tersedia</span></td>
+              <td>0 / 142.292</td>
+            </tr>
+            <tr>
+              <td>Tanggal Lulus</td><td>Akademik</td>
+              <td><span class="available-tag">✅ Tersedia</span></td>
+              <td>2 / 142.292</td>
+            </tr>
+            <tr>
+              <td>Fakultas</td><td>Akademik</td>
+              <td><span class="available-tag">✅ Tersedia</span></td>
+              <td>0 / 142.292</td>
+            </tr>
+            <tr>
+              <td>Program Studi</td><td>Akademik</td>
+              <td><span class="available-tag">✅ Tersedia</span></td>
+              <td>0 / 142.292</td>
+            </tr>
+            <tr style="background:rgba(239,68,68,0.03)">
+              <td>Tempat Kerja</td><td>Pekerjaan</td>
+              <td><span class="missing-tag">❌ Tidak tersedia</span></td>
+              <td>142.292 (100%)</td>
+            </tr>
+            <tr style="background:rgba(239,68,68,0.03)">
+              <td>Posisi / Jabatan</td><td>Pekerjaan</td>
+              <td><span class="missing-tag">❌ Tidak tersedia</span></td>
+              <td>142.292 (100%)</td>
+            </tr>
+            <tr style="background:rgba(239,68,68,0.03)">
+              <td>Kategori Pekerjaan</td><td>Pekerjaan</td>
+              <td><span class="missing-tag">❌ Tidak tersedia</span></td>
+              <td>142.292 (100%)</td>
+            </tr>
+            <tr style="background:rgba(239,68,68,0.03)">
+              <td>Kota Domisili Kerja</td><td>Pekerjaan</td>
+              <td><span class="missing-tag">❌ Tidak tersedia</span></td>
+              <td>142.292 (100%)</td>
+            </tr>
+            <tr style="background:rgba(239,68,68,0.03)">
+              <td>Email</td><td>Kontak</td>
+              <td><span class="missing-tag">❌ Tidak tersedia</span></td>
+              <td>142.292 (100%)</td>
+            </tr>
+            <tr style="background:rgba(239,68,68,0.03)">
+              <td>Nomor HP</td><td>Kontak</td>
+              <td><span class="missing-tag">❌ Tidak tersedia</span></td>
+              <td>142.292 (100%)</td>
+            </tr>
+            <tr style="background:rgba(239,68,68,0.03)">
+              <td>Sosial Media</td><td>Sosial Media</td>
+              <td><span class="missing-tag">❌ Tidak tersedia</span></td>
+              <td>142.292 (100%)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">Ringkasan Kekosongan per Kategori</h4>
+      <div class="table-container">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Kategori</th>
+              <th>Jumlah Field</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>📚 Akademik</strong></td>
+              <td>6 field</td>
+              <td><span class="available-tag">✅ Lengkap (99.99%)</span></td>
+            </tr>
+            <tr>
+              <td><strong>💼 Pekerjaan</strong></td>
+              <td>4 field</td>
+              <td><span class="missing-tag">❌ 0% terisi — perlu pengumpulan data</span></td>
+            </tr>
+            <tr>
+              <td><strong>📞 Kontak</strong></td>
+              <td>2 field</td>
+              <td><span class="missing-tag">❌ 0% terisi — perlu pengumpulan data</span></td>
+            </tr>
+            <tr>
+              <td><strong>📱 Sosial Media</strong></td>
+              <td>1 field</td>
+              <td><span class="missing-tag">❌ 0% terisi — perlu pengumpulan data</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- D. SISTEM PENGUMPULAN DATA LANJUTAN -->
+    <div class="section card animate-in">
+      <div class="section-header">
+        <div class="section-letter">D</div>
+        <h2>Sistem Pengumpulan Data Lanjutan (Consent-Based)</h2>
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">1. Struktur Formulir</h4>
+      <div class="table-container mb-16">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Tipe</th>
+              <th>Wajib?</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Nama Lengkap</td><td>Text</td><td>✅ Ya</td><td>Pre-filled dari akun</td></tr>
+            <tr><td>NIM</td><td>Text</td><td>Tidak</td><td>Pre-filled dari akun</td></tr>
+            <tr><td>Tahun Lulus</td><td>Number</td><td>✅ Ya</td><td>Range: 1990-2030</td></tr>
+            <tr><td>Fakultas</td><td>Select</td><td>Tidak</td><td>16 pilihan fakultas</td></tr>
+            <tr><td>Program Studi</td><td>Text</td><td>Tidak</td><td>Input bebas</td></tr>
+            <tr><td>Tempat Bekerja</td><td>Text</td><td>Tidak</td><td>Nama perusahaan/instansi</td></tr>
+            <tr><td>Posisi / Jabatan</td><td>Text</td><td>Tidak</td><td>Posisi saat ini</td></tr>
+            <tr><td>Kategori Pekerjaan</td><td>Select</td><td>Tidak</td><td>PNS / Swasta / Wirausaha / Lainnya</td></tr>
+            <tr><td>Kota Domisili Kerja</td><td>Text</td><td>Tidak</td><td>Kota tempat kerja</td></tr>
+            <tr><td>Kontak</td><td>Text</td><td>Tidak</td><td>Opsional — Email/HP</td></tr>
+            <tr><td>Sosial Media</td><td>Text</td><td>Tidak</td><td>Opsional — LinkedIn/IG/dll</td></tr>
+            <tr><td>Persetujuan Data</td><td>Checkbox</td><td>✅ Ya</td><td>Wajib sebelum data disimpan</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">2. Sistem Login</h4>
+      <div class="info-box mb-16">
+        <strong>Metode Login:</strong> Email atau NIM + Password<br>
+        <strong>Hak Akses:</strong><br>
+        • <strong>Admin</strong> — Melihat semua data alumni yang sudah consent, statistik, filter & search<br>
+        • <strong>Alumni</strong> — Hanya dapat melihat dan mengedit data sendiri<br><br>
+        <strong>Validasi Input:</strong> Nama dan tahun lulus wajib diisi, checkbox consent wajib diceklis sebelum submit, kategori pekerjaan harus sesuai pilihan yang tersedia.
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">3. Keamanan</h4>
+      <div class="warning-box mb-16">
+        🔒 <strong>Kebijakan Keamanan Data:</strong><br>
+        • Data <strong>hanya digunakan untuk pembelajaran dan penelitian akademik</strong><br>
+        • Data <strong>tidak boleh disebarluaskan</strong> ke pihak ketiga<br>
+        • <strong>Wajib persetujuan</strong> sebelum data disimpan (consent checkbox)<br>
+        • Kontak dan sosial media bersifat <strong>opsional</strong><br>
+        • Alumni dapat <strong>mengubah atau menghapus</strong> data mereka kapan saja
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">Alur Sistem (Flow)</h4>
+      <div class="flow-diagram">
+        <div class="flow-step">
+          <div class="step-icon">🔐</div>
+          <div class="step-title">Login</div>
+          <div class="step-desc">Email/NIM + Password</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">🔀</div>
+          <div class="step-title">Cek Role</div>
+          <div class="step-desc">Admin / Alumni</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">📝</div>
+          <div class="step-title">Isi Form</div>
+          <div class="step-desc">Data pekerjaan & kontak</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">✅</div>
+          <div class="step-title">Consent</div>
+          <div class="step-desc">Persetujuan data</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">💾</div>
+          <div class="step-title">Simpan</div>
+          <div class="step-desc">Data tersimpan aman</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E. OUTPUT TAMBAHAN -->
+    <div class="section card animate-in">
+      <div class="section-header">
+        <div class="section-letter">E</div>
+        <h2>Output Tambahan</h2>
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">Akun Dummy untuk Demo</h4>
+      <div class="table-container mb-16">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Email / NIM</th>
+              <th>Password</th>
+              <th>Nama</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge verified" style="font-size:11px;">Admin</span></td>
+              <td><code>admin@alumni.ac.id</code></td>
+              <td><code>admin123</code></td>
+              <td>Administrator Sistem</td>
+            </tr>
+            <tr>
+              <td><span class="badge pending" style="font-size:11px;">Alumni</span></td>
+              <td><code>20200001</code></td>
+              <td><code>alumni123</code></td>
+              <td>Ahmad Fauzi Rahman</td>
+            </tr>
+            <tr>
+              <td><span class="badge pending" style="font-size:11px;">Alumni</span></td>
+              <td><code>20190002</code></td>
+              <td><code>alumni123</code></td>
+              <td>Siti Nurhaliza Putri</td>
+            </tr>
+            <tr>
+              <td><span class="badge pending" style="font-size:11px;">Alumni</span></td>
+              <td><code>20210003</code></td>
+              <td><code>alumni123</code></td>
+              <td>Budi Santoso</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">Struktur Database</h4>
+      <div class="db-schema mb-16">
+<span class="comment">-- Tabel Users (Login)</span>
+<span class="keyword">CREATE TABLE</span> users (
+  id <span class="type">INTEGER PRIMARY KEY</span>,
+  email <span class="type">TEXT UNIQUE</span>,
+  nim <span class="type">TEXT UNIQUE</span>,
+  password_hash <span class="type">TEXT NOT NULL</span>,
+  role <span class="type">TEXT DEFAULT</span> <span class="comment">'alumni'</span>, <span class="comment">-- 'admin' atau 'alumni'</span>
+  nama <span class="type">TEXT NOT NULL</span>,
+  alumni_id <span class="type">INTEGER</span>,
+  created_at <span class="type">DATETIME</span>
+);
+
+<span class="comment">-- Tabel Alumni Extended (Data Lengkap)</span>
+<span class="keyword">CREATE TABLE</span> alumni_extended (
+  id <span class="type">INTEGER PRIMARY KEY</span>,
+  user_id <span class="type">INTEGER NOT NULL</span>,
+  nama <span class="type">TEXT NOT NULL</span>,
+  nim <span class="type">TEXT</span>,
+  tahun_lulus <span class="type">INTEGER</span>,
+  fakultas <span class="type">TEXT</span>,
+  program_studi <span class="type">TEXT</span>,
+  tempat_kerja <span class="type">TEXT</span>,           <span class="comment">-- Field baru</span>
+  posisi <span class="type">TEXT</span>,                  <span class="comment">-- Field baru</span>
+  kategori_pekerjaan <span class="type">TEXT</span>,      <span class="comment">-- PNS/Swasta/Wirausaha/Lainnya</span>
+  kota_domisili <span class="type">TEXT</span>,            <span class="comment">-- Field baru</span>
+  kontak <span class="type">TEXT</span>,                   <span class="comment">-- Opsional</span>
+  sosial_media <span class="type">TEXT</span>,             <span class="comment">-- Opsional</span>
+  consent_status <span class="type">INTEGER DEFAULT 0</span>,
+  consent_timestamp <span class="type">DATETIME</span>,
+  created_at <span class="type">DATETIME</span>,
+  updated_at <span class="type">DATETIME</span>,
+  <span class="keyword">FOREIGN KEY</span> (user_id) <span class="keyword">REFERENCES</span> users(id)
+);
+      </div>
+
+      <h4 style="margin-bottom:12px;color:var(--text-secondary);">Link ke Halaman Sistem</h4>
+      <div class="flex gap-12 flex-wrap">
+        <a href="/login.html" class="btn btn-primary">🔐 Login</a>
+        <a href="/alumni-form.html" class="btn btn-secondary">📝 Form Alumni</a>
+        <a href="/admin-alumni.html" class="btn btn-secondary">🛡️ Admin Dashboard</a>
+        <a href="/index.html" class="btn btn-secondary">📊 Dashboard Utama</a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align:center;margin-top:48px;color:var(--text-muted);font-size:12px;">
+      <p>📋 Laporan ini dihasilkan sebagai bagian dari TUGAS 2 — Rekayasa Kebutuhan</p>
+      <p>Sistem Pelacakan Alumni © 2026</p>
+    </div>
+  </div>
+</body>
+</html>

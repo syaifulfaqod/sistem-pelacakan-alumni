@@ -42,6 +42,39 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (alumni_id) REFERENCES alumni(id) ON DELETE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE,
+    nim TEXT UNIQUE,
+    password_hash TEXT NOT NULL,
+    role TEXT DEFAULT 'alumni',
+    nama TEXT NOT NULL,
+    alumni_id INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (alumni_id) REFERENCES alumni(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS alumni_extended (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    nama TEXT NOT NULL,
+    nim TEXT,
+    tahun_lulus INTEGER,
+    fakultas TEXT,
+    program_studi TEXT,
+    tempat_kerja TEXT,
+    posisi TEXT,
+    kategori_pekerjaan TEXT,
+    kota_domisili TEXT,
+    kontak TEXT,
+    sosial_media TEXT,
+    consent_status INTEGER DEFAULT 0,
+    consent_timestamp DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
 `);
 
 module.exports = db;

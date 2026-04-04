@@ -17,6 +17,8 @@ app.use('/api/alumni', require('./routes/alumni'));
 app.use('/api/tracking', require('./routes/tracking'));
 app.use('/api/evidence', require('./routes/evidence'));
 app.use('/api/history', require('./routes/history'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/form', require('./routes/alumni-form'));
 
 // Fallback to index.html
 app.get('*', (req, res) => {
